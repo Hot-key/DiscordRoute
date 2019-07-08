@@ -18,15 +18,27 @@ namespace DiscordRouteCore.Routing
                 var cmd = message.Content.Split(' ');
                 if (!context.User.IsBot)
                 {
-                    if (Msg.BufferDictionary.ContainsKey("MessageReceived"))
+                    if (Msg.BufferDictionary.ContainsKey("BeforeMessage"))
                     {
-                        var action = Msg.BufferDictionary["MessageReceived"];
+                        var action = Msg.BufferDictionary["BeforeMessage"];
 
                         action(message, message.Content);
                     }
                     if (Msg.BufferDictionary.ContainsKey(cmd[0]))
                     {
                         var action = Msg.BufferDictionary[cmd[0]];
+
+                        action(message, message.Content);
+                    }
+                    else if (Msg.BufferDictionary.ContainsKey("ErrorMessage"))
+                    {
+                        var action = Msg.BufferDictionary["ErrorMessage"];
+
+                        action(message, message.Content);
+                    }
+                    if (Msg.BufferDictionary.ContainsKey("AfterMessage"))
+                    {
+                        var action = Msg.BufferDictionary["AfterMessage"];
 
                         action(message, message.Content);
                     }

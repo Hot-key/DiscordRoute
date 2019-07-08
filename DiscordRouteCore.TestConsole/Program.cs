@@ -1,4 +1,5 @@
 ﻿using System;
+using DiscordRouteCore.Config;
 using DiscordRouteCore.Routing;
 
 namespace DiscordRouteCore.TestConsole
@@ -7,7 +8,7 @@ namespace DiscordRouteCore.TestConsole
     {
         public static void Main(string[] args)
         {
-            Router.Start("NTgyNzc2MTA0MzAxODg3NDk5.XOyvCA.FUVfa5SsbHO8JmYDZ_x0GM1f1ZQ").GetAwaiter().GetResult(); ;
+            Router.Start("Discord bot token").GetAwaiter().GetResult(); ;
         }
     }
 
@@ -15,11 +16,20 @@ namespace DiscordRouteCore.TestConsole
     {
         public Test()
         {
+            // All Message
+            msg["BeforeMessage"] = async (message, list) =>
+            {
+                Console.WriteLine("Test");
+                await message.Channel.SendMessageAsync("DiscordRouteTest - MessageReceived");
+            };
+
+            // --Test 
             msg["--Test"] = async (message, list) =>
             {
                 Console.WriteLine("Test");
-                await message.Channel.SendMessageAsync("DiscordRouteTest");
+                await message.Channel.SendMessageAsync("DiscordRouteTest - --Test");
             };
+
         }
     }
 }
