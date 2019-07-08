@@ -22,25 +22,25 @@ namespace DiscordRouteCore.Routing
                     {
                         var action = Msg.BufferDictionary["BeforeMessage"];
 
-                        action(message, message.Content);
+                        await action(message, message.Content);
                     }
                     if (Msg.BufferDictionary.ContainsKey(cmd[0]))
                     {
                         var action = Msg.BufferDictionary[cmd[0]];
 
-                        action(message, message.Content);
+                        await action(message, message.Content);
                     }
                     else if (Msg.BufferDictionary.ContainsKey("ErrorMessage"))
                     {
                         var action = Msg.BufferDictionary["ErrorMessage"];
 
-                        action(message, message.Content);
+                        await action(message, message.Content);
                     }
                     if (Msg.BufferDictionary.ContainsKey("AfterMessage"))
                     {
                         var action = Msg.BufferDictionary["AfterMessage"];
 
-                        action(message, message.Content);
+                        await action(message, message.Content);
                     }
                     await Log(new LogMessage(LogSeverity.Info, "Command", $"{context.User} : {context.Message}"));
                 }

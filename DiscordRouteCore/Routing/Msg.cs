@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Discord.WebSocket;
 
 namespace DiscordRouteCore.Routing
 {
     public class Msg
     {
-        public Action<SocketMessage, string> this[dynamic i]
+        public Func<SocketMessage, string, Task> this[dynamic i]
         {
             set
             {
@@ -15,9 +16,9 @@ namespace DiscordRouteCore.Routing
             }
         }
 
-        public static Dictionary<dynamic, Action<SocketMessage, string>> BufferDictionary = new Dictionary<dynamic, Action<SocketMessage, string>>();
+        public static Dictionary<dynamic, Func<SocketMessage, string, Task>> BufferDictionary = new Dictionary<dynamic, Func<SocketMessage, string, Task>>();
 
-        public void Add(dynamic type, Action<SocketMessage , string> action)
+        public void Add(dynamic type, Func<SocketMessage , string, Task> action)
         {
             BufferDictionary.Add(type, action);
         }
