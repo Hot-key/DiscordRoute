@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using DiscordRouteCore.Config;
 using DiscordRouteCore.Routing;
 
@@ -8,7 +9,7 @@ namespace DiscordRouteCore.TestConsole
     {
         public static void Main(string[] args)
         {
-            Router.Start("Discord bot token").GetAwaiter().GetResult(); ;
+            Router.Start("Token").GetAwaiter().GetResult(); ;
         }
     }
 

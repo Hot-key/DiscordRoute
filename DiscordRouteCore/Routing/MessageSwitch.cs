@@ -11,44 +11,47 @@ namespace DiscordRouteCore.Routing
     {
         public async Task MessageReceived(SocketMessage message)
         {
-            try
+            new Task(async()  => 
             {
-                var userMessage = message as SocketUserMessage;
-                SocketCommandContext context = new SocketCommandContext(Define.Option.client, userMessage);
-                var cmd = message.Content.Split(' ');
-                if (!context.User.IsBot)
+                try
                 {
-                    if (Msg.BufferDictionary.ContainsKey("BeforeMessage"))
+                    var userMessage = message as SocketUserMessage;
+                    SocketCommandContext context = new SocketCommandContext(Define.Option.client, userMessage);
+                    var cmd = message.Content.Split(' ');
+                    if (!context.User.IsBot)
                     {
-                        var action = Msg.BufferDictionary["BeforeMessage"];
+                        if (Msg.BufferDictionary.ContainsKey("BeforeMessage"))
+                        {
+                            var action = Msg.BufferDictionary["BeforeMessage"];
 
-                        await action(message, message.Content);
-                    }
-                    if (Msg.BufferDictionary.ContainsKey(cmd[0]))
-                    {
-                        var action = Msg.BufferDictionary[cmd[0]];
+                            await action(message, message.Content);
+                        }
+                        if (Msg.BufferDictionary.ContainsKey(cmd[0]))
+                        {
+                            var action = Msg.BufferDictionary[cmd[0]];
 
-                        await action(message, message.Content);
-                    }
-                    else if (Msg.BufferDictionary.ContainsKey("ErrorMessage"))
-                    {
-                        var action = Msg.BufferDictionary["ErrorMessage"];
+                            await action(message, message.Content);
+                        }
+                        else if (Msg.BufferDictionary.ContainsKey("ErrorMessage"))
+                        {
+                            var action = Msg.BufferDictionary["ErrorMessage"];
 
-                        await action(message, message.Content);
-                    }
-                    if (Msg.BufferDictionary.ContainsKey("AfterMessage"))
-                    {
-                        var action = Msg.BufferDictionary["AfterMessage"];
+                            await action(message, message.Content);
+                        }
+                        if (Msg.BufferDictionary.ContainsKey("AfterMessage"))
+                        {
+                            var action = Msg.BufferDictionary["AfterMessage"];
 
-                        await action(message, message.Content);
+                            await action(message, message.Content);
+                        }
+                        await Log(new LogMessage(LogSeverity.Info, "Command", $"{context.User} : {context.Message}"));
                     }
-                    await Log(new LogMessage(LogSeverity.Info, "Command", $"{context.User} : {context.Message}"));
                 }
-            }
-            catch (Exception e)
-            {
-                await Log(new LogMessage(LogSeverity.Info, "Exception!", $"{e.Message}"));
-            }
+                catch (Exception e)
+                {
+                    await Log(new LogMessage(LogSeverity.Info, "Exception!", $"{e.Message}"));
+                }
+            }).Start();
         }
 
         private Task Log(LogMessage msg)
